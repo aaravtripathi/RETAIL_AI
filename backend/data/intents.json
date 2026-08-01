@@ -1,0 +1,134 @@
+{
+  "intents": [
+    {
+      "tag": "return_policy",
+      "patterns": [
+        "What is your return policy?",
+        "Can I return an item I bought last week?",
+        "How many days do I have to return?",
+        "I want a refund for my purchase",
+        "How do returns work here?"
+      ],
+      "responses": [
+        "Our standard return policy gives you 30 days from the purchase date to return unworn items in their original packaging for a full refund or store credit."
+      ]
+    },
+    {
+      "tag": "order_tracking",
+      "patterns": [
+        "Where is my order?",
+        "How can I track my shipment?",
+        "What is the status of order 84930?",
+        "When will my package arrive?",
+        "Track my delivery please"
+      ],
+      "responses": [
+        "You can track your real-time shipment status anytime by pasting your Order Reference ID in our automated carrier portal! Most standard domestic deliveries take 2 to 4 business days."
+      ]
+    },
+    {
+      "tag": "store_hours",
+      "patterns": [
+        "What are your working hours?",
+        "When do you open in the morning?",
+        "What time does the store close tonight?",
+        "Are you open on Sundays and weekends?",
+        "Business hours of flagship location"
+      ],
+      "responses": [
+        "Our flagship physical retail centers are open Monday through Saturday from 9:00 AM to 9:00 PM, and Sundays from 10:00 AM to 7:00 PM EST."
+      ]
+    },
+    {
+      "tag": "vip_discounts",
+      "patterns": [
+        "How does the loyalty program work?",
+        "What discounts do VIP members get?",
+        "Can I apply my reward points?",
+        "How do I upgrade to VIP Gold tier?",
+        "Are there loyalty rewards for frequent buyers?"
+      ],
+      "responses": [
+        "Our VIP Royalty Program grants Gold tier members an automatic 15% discount across all newly dropped seasonal apparel collections, zero shipping fees, and 50 points per in-store facial check-in!"
+      ]
+    },
+    {
+      "tag": "international_shipping",
+      "patterns": [
+        "Do you ship internationally?",
+        "Can you deliver to Europe and Canada?",
+        "What are your overseas shipping rates?",
+        "Is global worldwide shipping available?",
+        "Customs fees for international deliveries"
+      ],
+      "responses": [
+        "Yes! We partner with global DHL express carriers to fulfill deliveries across over 85 international destinations with guaranteed customs duties calculation at checkout."
+      ]
+    },
+    {
+      "tag": "payment_methods",
+      "patterns": [
+        "What payment methods do you accept?",
+        "Can I pay with Apple Pay or PayPal?",
+        "Do you take credit cards and debit?",
+        "Can I use Klarna or Afterpay installment plans?",
+        "Payment options at cash registry"
+      ],
+      "responses": [
+        "We support all major credit and debit cards, Apple Pay, Google Pay, PayPal, and 0%-interest split installment financing via Klarna and Afterpay!"
+      ]
+    },
+    {
+      "tag": "size_guide",
+      "patterns": [
+        "How do your sizes run?",
+        "Where is the sizing chart for jackets?",
+        "Should I size up for footwear and sneakers?",
+        "What size is medium compared to measurements?",
+        "Apparel fitting recommendations"
+      ],
+      "responses": [
+        "Our items fit true to modern standard sizing! You can view detailed shoulder, waist, and inseam inches directly on our interactive Product Scanner item diagnostics."
+      ]
+    },
+    {
+      "tag": "out_of_stock",
+      "patterns": [
+        "What if an item is out of stock?",
+        "Can you notify me when sneakers restock?",
+        "How often do you replenish store inventory?",
+        "Will sold out items come back online?",
+        "Waitlist registration for drops"
+      ],
+      "responses": [
+        "Popular seasonal inventory is replenished every Tuesday morning! You can activate our AI restock alert badge on any sold out item page for instant SMS notification."
+      ]
+    },
+    {
+      "tag": "gift_cards",
+      "patterns": [
+        "Do you sell store gift cards?",
+        "How can I check my gift card balance?",
+        "Can digital gift cards be redeemed in store?",
+        "Do store certificates expire over time?",
+        "Buying prepaid vouchers for friends"
+      ],
+      "responses": [
+        "Digital and physical embossed gift cards are available from $25 to $500! They never expire and can be applied seamlessly both online and at physical AI POS kiosks."
+      ]
+    },
+    {
+      "tag": "human_escalation",
+      "patterns": [
+        "I want to speak with a real human agent",
+        "Can you transfer me to customer service representative?",
+        "Connect me to support management",
+        "Talk to a live supervisor please",
+        "Human intervention requested for billing dispute"
+      ],
+      "responses": [
+        "I am connecting your chat session directly to our senior Level 2 Live Customer Experience team right now. Estimated wait time is under 45 seconds!"
+      ]
+    }
+  ]
+}

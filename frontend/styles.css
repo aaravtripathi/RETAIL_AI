@@ -1,0 +1,98 @@
+/* Custom shadcn/ui inspired design system & animation utilities */
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+}
+
+/* Animations & Keyframe definitions */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Navigation & Tab states */
+.nav-tab {
+    color: #a1a1aa;
+    border: 1px solid transparent;
+}
+
+.nav-tab:hover {
+    background: rgba(39, 39, 42, 0.4);
+    color: #f4f4f5;
+}
+
+.nav-tab.active-tab {
+    background: #1f1f23;
+    color: #ffffff;
+    border-color: #27272a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+}
+
+.nav-tab.active-tab i {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Glassmorphism utility classes */
+.glass-card {
+    background: rgba(24, 24, 27, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(39, 39, 42, 0.8);
+}
+
+/* Glowing shadow accents */
+.glow-blue, .glow-purple {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.35);
+}
+
+.glow-emerald {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+}
+
+/* Toast notifications */
+.toast-msg {
+    pointer-events: auto;
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: #f4f4f5;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 9999;
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Chart customizations */
+canvas {
+    max-width: 100%;
+}

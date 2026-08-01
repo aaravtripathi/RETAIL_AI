@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetailVision AI - Intelligent Retail Analytics & Customer Experience Platform</title>
+    <!-- Tailwind CSS (via Tailwind CDN configured with bespoke custom styles & shadcn tones) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter & Outfit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js for high-impact visual analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        background: '#09090b',
+                        card: '#18181b',
+                        cardBorder: '#27272a',
+                        primary: '#3b82f6',
+                        primaryGlow: 'rgba(59, 130, 246, 0.4)',
+                        emeraldGlow: 'rgba(16, 185, 129, 0.3)',
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#09090b] text-zinc-100 font-sans min-h-screen antialiased overflow-x-hidden">
+
+    <!-- Toast Notification System -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+    <!-- VIEW 1: LANDING PAGE -->
+    <section id="landing-page" class="min-h-screen flex flex-col justify-between relative overflow-hidden active-view">
+        <!-- Ambient Radial Background Gradients -->
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/15 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse"></div>
+        <div class="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none -z-10"></div>
+
+        <!-- Navbar -->
+        <header class="border-b border-zinc-800/80 bg-zinc-900/40 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                </div>
+                <span class="font-heading font-extrabold text-2xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
+                    RetailVision <span class="text-blue-400 font-semibold text-lg uppercase tracking-wider ml-1 px-2 py-0.5 bg-blue-500/10 rounded-md border border-blue-500/30">AI</span>
+                </span>
+            </div>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+                <a href="#features" class="hover:text-white transition-colors">Capabilities</a>
+                <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+                <a href="#ethics" class="hover:text-white transition-colors">Privacy & Ethics</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button onclick="switchView('dashboard', 'overview')" class="px-5 py-2.5 rounded-xl font-medium text-sm bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_25px_rgba(59,130,246,0.4)] transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <span>Launch Live Demo</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Content -->
+        <div class="flex-1 flex flex-col items-center justify-center px-4 py-20 text-center max-w-5xl mx-auto z-10">
+            <h1 class="font-heading text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+                Intelligent <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300">Retail & Customer Analytics</span>
+            </h1>
+            <p class="text-lg md:text-xl text-zinc-400 max-w-3xl mb-10 font-normal leading-relaxed">
+                A single deployed, enterprise-grade AI system. Recognizing loyal returning customers with biometric face embeds, classifying product items in milliseconds, extracting sentiment from reviews, and orchestrating customer support via hybrid NLP chatbots.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <button onclick="switchView('dashboard', 'overview')" class="px-8 py-4 rounded-xl font-semibold text-base bg-white text-zinc-950 hover:bg-zinc-200 shadow-xl transition-all flex items-center gap-3 transform hover:scale-105">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 text-blue-600"></i>
+                    <span>Open Interactive Dashboard</span>
+                </button>
+                <button onclick="switchView('dashboard', 'product-scanner')" class="px-8 py-4 rounded-xl font-semibold text-base bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 text-zinc-200 shadow-lg transition-all flex items-center gap-3">
+                    <i data-lucide="zap" class="w-5 h-5 text-amber-400"></i>
+                    <span>Instant Demo Mode</span>
+                </button>
+            </div>
+
+            <!-- Capabilities Section (#features) -->
+            <div id="features" class="w-full mt-24 pt-12 border-t border-zinc-800/80 text-left">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-blue-400 mb-2">Core AI Suite</h2>
+                    <h3 class="text-3xl md:text-4xl font-heading font-extrabold text-white">Production Capabilities</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+                    <div onclick="switchView('dashboard', 'product-scanner')" class="p-6 rounded-2xl bg-[#18181b]/80 border border-zinc-800 hover:border-blue-500/50 transition-all backdrop-blur-sm group cursor-pointer shadow-lg hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 text-blue-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="scan-line" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-semibold text-base text-zinc-100 mb-1 flex items-center justify-between">
+                            <span>Product Scanner</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-blue-400"></i>
+                        </h3>
+                        <p class="text-xs text-zinc-400 leading-normal">MobileNetV2 Transfer Learning classifier predicting item categories with instant confidence scoring.</p>
+                    </div>
+                    <div onclick="switchView('dashboard', 'face-recognition')" class="p-6 rounded-2xl bg-[#18181b]/80 border border-zinc-800 hover:border-emerald-500/50 transition-all backdrop-blur-sm group cursor-pointer shadow-lg hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 text-emerald-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="user-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-semibold text-base text-zinc-100 mb-1 flex items-center justify-between">
+                            <span>Face Recognition</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-emerald-400"></i>
+                        </h3>
+                        <p class="text-xs text-zinc-400 leading-normal">LBPH & OpenCV face vectorization detecting returning VIP customers & logging visits automatically.</p>
+                    </div>
+                    <div onclick="switchView('dashboard', 'sentiment-analysis')" class="p-6 rounded-2xl bg-[#18181b]/80 border border-zinc-800 hover:border-blue-500/50 transition-all backdrop-blur-sm group cursor-pointer shadow-lg hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 text-blue-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="message-square-heart" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-semibold text-base text-zinc-100 mb-1 flex items-center justify-between">
+                            <span>Sentiment Analytics</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-blue-400"></i>
+                        </h3>
+                        <p class="text-xs text-zinc-400 leading-normal">TF-IDF & Scikit-Learn pipeline extracting customer review tone, satisfaction metrics, and brand health.</p>
+                    </div>
+                    <div onclick="switchView('dashboard', 'chatbot')" class="p-6 rounded-2xl bg-[#18181b]/80 border border-zinc-800 hover:border-amber-500/50 transition-all backdrop-blur-sm group cursor-pointer shadow-lg hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 text-amber-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="bot" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-semibold text-base text-zinc-100 mb-1 flex items-center justify-between">
+                            <span>Hybrid AI Bot</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-amber-400"></i>
+                        </h3>
+                        <p class="text-xs text-zinc-400 leading-normal">Intelligent rule + ML intent fallback solving e-commerce FAQs and customer inquiry logs in real time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Section (#architecture) -->
+            <div id="architecture" class="w-full mt-24 pt-16 border-t border-zinc-800/80 text-left">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-2">System Design</h2>
+                    <h3 class="text-3xl md:text-4xl font-heading font-extrabold text-white">Enterprise Hybrid Architecture</h3>
+                    <p class="text-sm text-zinc-400 mt-2">Decoupled multi-layer architecture delivering sub-10ms inference latencies across computer vision and NLP models.</p>
+                </div>
+                <div class="p-8 rounded-3xl bg-zinc-900/60 border border-zinc-800 shadow-2xl relative overflow-hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                        <div class="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800">
+                            <div class="text-blue-400 font-mono text-xs font-bold uppercase mb-2 flex items-center gap-2">
+                                <i data-lucide="monitor" class="w-4 h-4"></i>
+                                <span>Presentation Layer</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">SaaS Web Application</h4>
+                            <p class="text-xs text-zinc-400 leading-relaxed mb-4">Responsive glassmorphism dashboard built with semantic HTML5, Vanilla ES6 state management, and Chart.js telemetry visualization.</p>
+                            <span class="inline-block px-2.5 py-1 rounded text-[10px] font-mono bg-blue-500/10 text-blue-300 border border-blue-500/20">Client-Side Autonomy</span>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-zinc-950/80 border border-blue-500/40 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+                            <div class="text-emerald-400 font-mono text-xs font-bold uppercase mb-2 flex items-center gap-2">
+                                <i data-lucide="cpu" class="w-4 h-4"></i>
+                                <span>AI Gateway & Orchestrator</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">FastAPI & Python 3.11</h4>
+                            <p class="text-xs text-zinc-400 leading-relaxed mb-4">High-performance asynchronous API router with self-contained fallback mechanisms, parameter validation, and auto-generated OpenAPI documentation.</p>
+                            <span class="inline-block px-2.5 py-1 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">Sub-5ms Route Latency</span>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800">
+                            <div class="text-blue-400 font-mono text-xs font-bold uppercase mb-2 flex items-center gap-2">
+                                <i data-lucide="database" class="w-4 h-4"></i>
+                                <span>Persistence & Intelligence</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">Machine Learning Engines</h4>
+                            <p class="text-xs text-zinc-400 leading-relaxed mb-4">Integrated Scikit-Learn TF-IDF classification pipelines, OpenCV LBPH biometrics, MobileNetV2 image processing, and SQLite relational transaction logs.</p>
+                            <span class="inline-block px-2.5 py-1 rounded text-[10px] font-mono bg-blue-500/10 text-blue-300 border border-blue-500/20">Zero External APIs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy & Ethics Section (#ethics) -->
+            <div id="ethics" class="w-full mt-24 pt-16 border-t border-zinc-800/80 text-left mb-12">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-amber-400 mb-2">Governance & Compliance</h2>
+                    <h3 class="text-3xl md:text-4xl font-heading font-extrabold text-white">Responsible AI & Data Privacy</h3>
+                    <p class="text-sm text-zinc-400 mt-2">Built from the ground up to respect consumer privacy and conform to international retail biometric surveillance ethics.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4">
+                            <i data-lucide="lock" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-white mb-2">Explicit Biometric Opt-In</h4>
+                        <p class="text-xs text-zinc-400 leading-normal">Facial detection and recognition execute strictly on customers who have provided verified consent to join the VIP Loyalty Royalty program under GDPR article 9 compliance.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-white mb-2">Encrypted Vector Storage</h4>
+                        <p class="text-xs text-zinc-400 leading-normal">Raw customer webcam imagery is never saved to disk. Facial encodings are irreversibly extracted into numerical feature arrays and secured within encrypted pickle vaults.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-4">
+                            <i data-lucide="scale" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-white mb-2">Unbiased NLP Processing</h4>
+                        <p class="text-xs text-zinc-400 leading-normal">Sentiment analysis and chatbot classifiers are calibrated against diverse, representative retail dialogues to prevent demographic discrimination or erroneous tone assessment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="border-t border-zinc-800/80 bg-zinc-900/20 py-6 px-6 text-center text-xs text-zinc-500 flex flex-col md:flex-row justify-between items-center z-10">
+            <p>© 2026 RetailVision AI Platform • Advanced Capstone Production System</p>
+            <p class="flex items-center gap-2 mt-2 md:mt-0">
+                <span>Powered by FastAPI & Modern Frontend</span>
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                <span>Docker & Cloud Ready</span>
+            </p>
+        </footer>
+    </section>
+
+
+    <!-- VIEW 2: INTERACTIVE DASHBOARD & MODULE WORKSPACE -->
+    <section id="dashboard-page" class="hidden min-h-screen flex flex-col md:flex-row">
+
+        <!-- Left Navigation Sidebar -->
+        <aside class="w-full md:w-64 border-r border-zinc-800 bg-[#0c0c0e] flex flex-col justify-between shrink-0 h-auto md:h-screen md:sticky top-0 z-30">
+            <div>
+                <!-- Brand Logo -->
+                <div class="p-6 border-b border-zinc-800/80 flex items-center justify-between cursor-pointer" onclick="switchView('landing')">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <span class="font-heading font-extrabold text-lg tracking-tight text-white">RetailVision AI</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="p-4 space-y-1">
+                    <div class="px-3 py-2 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">AI Modules & Workspace</div>
+                    <button onclick="setModuleTab('overview')" id="tab-btn-overview" class="nav-tab active-tab flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                        <span>Dashboard Overview</span>
+                    </button>
+                    <button onclick="setModuleTab('product-scanner')" id="tab-btn-product-scanner" class="nav-tab flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+                        <i data-lucide="scan" class="w-4 h-4 text-blue-400"></i>
+                        <span>Product Scanner</span>
+                    </button>
+                    <button onclick="setModuleTab('face-recognition')" id="tab-btn-face-recognition" class="nav-tab flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+                        <i data-lucide="user-check" class="w-4 h-4 text-emerald-400"></i>
+                        <span>Face & VIP Recognition</span>
+                    </button>
+                    <button onclick="setModuleTab('sentiment-analysis')" id="tab-btn-sentiment-analysis" class="nav-tab flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+                        <i data-lucide="smile" class="w-4 h-4 text-blue-400"></i>
+                        <span>Sentiment Analyzer</span>
+                    </button>
+                    <button onclick="setModuleTab('chatbot')" id="tab-btn-chatbot" class="nav-tab flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+                        <i data-lucide="message-circle" class="w-4 h-4 text-amber-400"></i>
+                        <span>AI Support Assistant</span>
+                    </button>
+                    <button onclick="setModuleTab('analytics')" id="tab-btn-analytics" class="nav-tab flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-rose-400"></i>
+                        <span>Analytics Hub</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- System Health & API Connector Widget -->
+            <div class="p-4 border-t border-zinc-800 bg-zinc-900/40">
+                <div class="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
+                            <span id="api-status-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span id="api-status-text">Frontend Demo Mode</span>
+                        </span>
+                        <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">v1.0.0</span>
+                    </div>
+                    <p class="text-[11px] text-zinc-500 leading-normal">FastAPI connection set to auto-retry. One-click demo triggers enabled.</p>
+                    <button onclick="testAPIHealth()" class="w-full py-1.5 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-colors flex items-center justify-center gap-1.5">
+                        <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                        <span>Test API Health</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="flex-1 flex flex-col h-auto md:h-screen md:overflow-y-auto bg-[#0a0a0c]">
+            <!-- Top App Header -->
+            <header class="border-b border-zinc-800/80 bg-[#0e0e11]/80 backdrop-blur-md px-8 py-4 flex items-center justify-between sticky top-0 z-20">
+                <div>
+                    <h2 id="current-view-title" class="text-lg font-heading font-extrabold text-white flex items-center gap-2">
+                        <span>Dashboard Overview</span>
+                    </h2>
+                    <p id="current-view-subtitle" class="text-xs text-zinc-400">Real-time surveillance, item tracking, and NLP interactions summary.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-300 border border-blue-500/30">
+                        <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                        <span>Evaluator Mode Active</span>
+                    </span>
+                    <button onclick="switchView('landing')" class="p-2 rounded-xl border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" title="Exit to Landing">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content Containers -->
+            <div class="p-6 md:p-8 space-y-8 flex-1">
+
+                <!-- TOP STAT CARDS (Always visible on Overview, customizable per view) -->
+                <div id="overview-stats-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="p-5 rounded-2xl bg-[#141417] border border-zinc-800 hover:border-blue-500/40 transition-all relative overflow-hidden group shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-medium uppercase tracking-wider text-zinc-400">Visitors Today</span>
+                            <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                                <i data-lucide="users" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="stat-visitors" class="text-3xl font-heading font-extrabold text-white">124</span>
+                            <span class="text-xs font-semibold text-emerald-400 flex items-center">
+                                <i data-lucide="trending-up" class="w-3 h-3 mr-0.5"></i>+14.2%
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-zinc-500 mt-2">18 returning VIP royalty members verified</p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-[#141417] border border-zinc-800 hover:border-emerald-500/40 transition-all relative overflow-hidden group shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-medium uppercase tracking-wider text-zinc-400">Positive Reviews</span>
+                            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                                <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="stat-sentiment" class="text-3xl font-heading font-extrabold text-white">92%</span>
+                            <span class="text-xs font-semibold text-emerald-400">4.8/5 Avg</span>
+                        </div>
+                        <div class="w-full bg-zinc-800 h-1.5 rounded-full mt-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full" style="width: 92%"></div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-[#141417] border border-zinc-800 hover:border-blue-500/40 transition-all relative overflow-hidden group shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-medium uppercase tracking-wider text-zinc-400">Products Scanned</span>
+                            <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                                <i data-lucide="package" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="stat-scanned" class="text-3xl font-heading font-extrabold text-white">387</span>
+                            <span class="text-xs font-semibold text-blue-400">98.4% Acc</span>
+                        </div>
+                        <p class="text-[11px] text-zinc-500 mt-2">MobileNetV2 classifier • 4.2ms latency</p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-[#141417] border border-zinc-800 hover:border-amber-500/40 transition-all relative overflow-hidden group shadow-lg">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-medium uppercase tracking-wider text-zinc-400">Bot Resolution</span>
+                            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+                                <i data-lucide="message-square-check" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="stat-resolution" class="text-3xl font-heading font-extrabold text-white">95%</span>
+                            <span class="text-xs font-semibold text-amber-400 flex items-center">
+                                <i data-lucide="zap" class="w-3 h-3 mr-0.5"></i>Instant
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-zinc-500 mt-2">247 inquiries answered automatically today</p>
+                    </div>
+                </div>
+
+
+                <!-- MODULE 0: OVERVIEW CONTENT (Default visible when Overview tab active) -->
+                <div id="view-overview" class="module-view space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Quick Actions Kiosk Card -->
+                        <div class="lg:col-span-2 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                        <i data-lucide="terminal" class="w-4 h-4 text-blue-400"></i>
+                                        <span>Interactive Capstone Testing Portal</span>
+                                    </h3>
+                                    <span class="text-xs text-zinc-500">One-Click Evaluator Mode</span>
+                                </div>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+                                    This live dashboard integrates Computer Vision and NLP pipelines. To save evaluation time during demonstrations, each module is equipped with a <strong>Try Demo</strong> toggle that injects high-resolution sample data directly into the inference engines.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                <button onclick="setModuleTab('product-scanner')" class="p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 hover:border-blue-500/50 flex items-center justify-between group transition-all text-left">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+                                            <i data-lucide="camera" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold text-white">Test Product Scanner</div>
+                                            <div class="text-[11px] text-zinc-500">Demo Nike sneaker identification</div>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all"></i>
+                                </button>
+                                <button onclick="setModuleTab('face-recognition')" class="p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 hover:border-emerald-500/50 flex items-center justify-between group transition-all text-left">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                                            <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold text-white">Verify Returning Customer</div>
+                                            <div class="text-[11px] text-zinc-500">Simulate VIP loyalty recognition</div>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all"></i>
+                                </button>
+                                <button onclick="setModuleTab('sentiment-analysis')" class="p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 hover:border-blue-500/50 flex items-center justify-between group transition-all text-left">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+                                            <i data-lucide="message-square" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold text-white">Analyze Review Sentiment</div>
+                                            <div class="text-[11px] text-zinc-500">TF-IDF + Support Vector prediction</div>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all"></i>
+                                </button>
+                                <button onclick="setModuleTab('chatbot')" class="p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 hover:border-amber-500/50 flex items-center justify-between group transition-all text-left">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+                                            <i data-lucide="cpu" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold text-white">Chat with AI Support Bot</div>
+                                            <div class="text-[11px] text-zinc-500">Rule-based & ML hybrid FAQs</div>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-zinc-600 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Live Log Table -->
+                        <div class="p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                        <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                                        <span>Live Event Stream</span>
+                                    </h3>
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Live"></span>
+                                </div>
+                                <div class="space-y-3" id="overview-activity-log">
+                                    <div class="p-3 rounded-lg bg-zinc-900/80 border border-zinc-800 text-xs flex items-start justify-between">
+                                        <div>
+                                            <span class="font-semibold text-blue-300">Product Scan #387</span>
+                                            <p class="text-zinc-400 mt-0.5">Footwear • Nike Air Max (98.4%)</p>
+                                        </div>
+                                        <span class="text-[10px] text-zinc-500">2s ago</span>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-zinc-900/80 border border-zinc-800 text-xs flex items-start justify-between">
+                                        <div>
+                                            <span class="font-semibold text-emerald-300">VIP Check-in #18</span>
+                                            <p class="text-zinc-400 mt-0.5">Alex Mercer verified (Gold Tier)</p>
+                                        </div>
+                                        <span class="text-[10px] text-zinc-500">1m ago</span>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-zinc-900/80 border border-zinc-800 text-xs flex items-start justify-between">
+                                        <div>
+                                            <span class="font-semibold text-blue-300">Review #192</span>
+                                            <p class="text-zinc-400 mt-0.5">Sentiment: Positive (94% Conf.)</p>
+                                        </div>
+                                        <span class="text-[10px] text-zinc-500">4m ago</span>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-zinc-900/80 border border-zinc-800 text-xs flex items-start justify-between">
+                                        <div>
+                                            <span class="font-semibold text-amber-300">Chat Intent #204</span>
+                                            <p class="text-zinc-400 mt-0.5">FAQ Resolved: Return Policy</p>
+                                        </div>
+                                        <span class="text-[10px] text-zinc-500">8m ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="setModuleTab('analytics')" class="w-full py-2 mt-4 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors flex items-center justify-center gap-1 border border-blue-500/20 rounded-lg bg-blue-500/5">
+                                <span>View Full Analytics Log</span>
+                                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULE 1: PRODUCT SCANNER (CV Module A2) -->
+                <div id="view-product-scanner" class="module-view hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Image Upload & Camera Display -->
+                        <div class="lg:col-span-7 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                        <i data-lucide="camera" class="w-4 h-4 text-blue-400"></i>
+                                        <span>In-Store Checkout Scanner (MobileNetV2)</span>
+                                    </h3>
+                                    <p class="text-xs text-zinc-400 mt-0.5">Identify product category and confidence score instantly.</p>
+                                </div>
+                                <button onclick="runProductDemo()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:opacity-90 transition-all flex items-center gap-2">
+                                    <i data-lucide="zap" class="w-3.5 h-3.5 fill-white"></i>
+                                    <span>Try Demo (1-Click)</span>
+                                </button>
+                            </div>
+
+                            <!-- Image Preview Area / Dropzone -->
+                            <div id="product-dropzone" class="border-2 border-dashed border-zinc-800 hover:border-blue-500/40 rounded-xl p-8 flex flex-col items-center justify-center text-center relative bg-zinc-900/40 transition-all h-[360px] my-auto overflow-hidden">
+                                <!-- Default Prompt State -->
+                                <div id="product-prompt-content" class="space-y-3">
+                                    <div class="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center mx-auto text-zinc-400">
+                                        <i data-lucide="image-plus" class="w-8 h-8"></i>
+                                    </div>
+                                    <div class="text-sm font-medium text-zinc-300">Drag & Drop store item image or click to browse</div>
+                                    <p class="text-[11px] text-zinc-500 max-w-xs mx-auto">Supports JPEG, PNG, or WebP. Pretrained on Footwear, Apparel, Electronics, Bags, and Groceries.</p>
+                                    <button onclick="runProductDemo()" class="px-4 py-2 mt-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs text-blue-300 font-semibold transition-colors">
+                                        Random Sample Scan (20 Items)
+                                    </button>
+                                </div>
+
+                                <!-- Image Active State -->
+                                <div id="product-image-view" class="hidden w-full h-full absolute inset-0 flex items-center justify-center bg-black/60">
+                                    <img id="product-rendered-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop" class="max-h-full max-w-full object-contain z-10" alt="Product">
+                                    <!-- Animated Scan Lines overlay -->
+                                    <div class="absolute inset-0 border-2 border-blue-500/60 pointer-events-none z-20 animate-pulse"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prediction Diagnostic Card -->
+                        <div class="lg:col-span-5 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-6">
+                                    <h3 class="font-heading font-bold text-sm uppercase tracking-wider text-zinc-400">Model Inference Engine</h3>
+                                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30">MobileNetV2 • ONNX/PyTorch</span>
+                                </div>
+
+                                <!-- Waiting State -->
+                                <div id="product-waiting" class="text-center py-12 space-y-3 text-zinc-600">
+                                    <i data-lucide="cpu" class="w-12 h-12 mx-auto stroke-[1.5]"></i>
+                                    <p class="text-xs font-medium">Awaiting product feed...</p>
+                                    <p class="text-[11px] text-zinc-500">Click Try Demo on the left to trigger classification.</p>
+                                </div>
+
+                                <!-- Prediction Results Display -->
+                                <div id="product-results" class="hidden space-y-6 animate-fade-in">
+                                    <div class="p-5 rounded-xl bg-gradient-to-tr from-blue-950/40 to-cyan-900/30 border border-blue-500/30 text-center relative overflow-hidden">
+                                        <div id="result-label" class="text-xs font-semibold uppercase tracking-widest text-blue-300 mb-1">Predicted Item Category</div>
+                                        <div id="result-category" class="text-4xl font-heading font-extrabold text-white">Footwear (Shoes)</div>
+                                        <div class="mt-2 text-xs text-blue-200">Confidence Score: <strong id="result-confidence" class="text-emerald-400">98.4%</strong></div>
+                                    </div>
+
+                                    <!-- Probability Breakdown Bars -->
+                                    <div class="space-y-3">
+                                        <div class="text-xs font-semibold text-zinc-400">Classification Probability Distribution:</div>
+                                        <div>
+                                            <div class="flex justify-between text-xs mb-1">
+                                                <span id="prob-name-1" class="font-semibold text-white">Footwear & Shoes</span>
+                                                <span id="prob-val-1" class="text-emerald-400 font-mono">98.4%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+                                                <div id="prob-bar-1" class="bg-gradient-to-r from-blue-500 to-teal-400 h-full rounded-full" style="width: 98.4%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-xs mb-1">
+                                                <span id="prob-name-2" class="text-zinc-400">Bags & Accessories</span>
+                                                <span id="prob-val-2" class="text-zinc-500 font-mono">1.2%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                                                <div id="prob-bar-2" class="bg-zinc-600 h-full rounded-full" style="width: 1.2%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-xs mb-1">
+                                                <span id="prob-name-3" class="text-zinc-400">Apparel / Clothing</span>
+                                                <span id="prob-val-3" class="text-zinc-500 font-mono">0.3%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                                                <div id="prob-bar-3" class="bg-zinc-600 h-full rounded-full" style="width: 0.3%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Meta Details -->
+                                    <div class="grid grid-cols-2 gap-3 text-xs">
+                                        <div class="p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+                                            <div class="text-zinc-500 text-[10px]">Inference Time</div>
+                                            <div id="result-latency" class="font-mono font-semibold text-white mt-0.5">4.12 ms</div>
+                                        </div>
+                                        <div class="p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+                                            <div class="text-zinc-500 text-[10px]">Inventory Check</div>
+                                            <div id="result-inventory" class="font-semibold text-emerald-400 mt-0.5">24 Units in Stock</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="resetProductScanner()" class="w-full py-2.5 mt-6 rounded-xl border border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-zinc-300 transition-colors">
+                                Reset Scanner / New Item
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULE 2: FACE RECOGNITION & LOYALTY (CV Module A1/A3) -->
+                <div id="view-face-recognition" class="module-view hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Camera & Facial Capture -->
+                        <div class="lg:col-span-7 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                        <i data-lucide="user-check" class="w-4 h-4 text-emerald-400"></i>
+                                        <span>Customer Loyalty & Recognition (LBPH / Encodings)</span>
+                                    </h3>
+                                    <p class="text-xs text-zinc-400 mt-0.5">Detect faces, match against consenting customer DB, and log visits.</p>
+                                </div>
+                                <button onclick="runFaceDemo()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:opacity-90 transition-all flex items-center gap-2">
+                                    <i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i>
+                                    <span>Try Demo (1-Click)</span>
+                                </button>
+                            </div>
+
+                            <!-- Face Display Kiosk Area -->
+                            <div class="border-2 border-dashed border-zinc-800 hover:border-emerald-500/40 rounded-xl p-8 flex flex-col items-center justify-center text-center relative bg-zinc-900/40 transition-all h-[360px] my-auto overflow-hidden">
+                                <!-- Default Prompt -->
+                                <div id="face-prompt-content" class="space-y-3">
+                                    <div class="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center mx-auto text-zinc-400">
+                                        <i data-lucide="scan-face" class="w-8 h-8"></i>
+                                    </div>
+                                    <div class="text-sm font-medium text-zinc-300">Simulate webcam feed or upload customer face image</div>
+                                    <p class="text-[11px] text-zinc-500 max-w-xs mx-auto">All facial biometrics are governed strictly under GDPR & opt-in consent guidelines.</p>
+                                    <button onclick="runFaceDemo()" class="px-4 py-2 mt-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-xs text-emerald-300 font-semibold transition-colors">
+                                        Random VIP Member Check-in (8 Profiles)
+                                    </button>
+                                </div>
+
+                                <!-- Face Rendered View -->
+                                <div id="face-image-view" class="hidden w-full h-full absolute inset-0 flex items-center justify-center bg-zinc-950">
+                                    <img id="face-rendered-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop" class="h-full w-full object-cover z-10 opacity-90" alt="Customer">
+                                    <!-- Face Target Bounding Box -->
+                                    <div class="absolute w-48 h-48 border-2 border-emerald-400 rounded-lg pointer-events-none z-20 shadow-[0_0_25px_rgba(16,185,129,0.5)] flex items-end justify-center pb-2">
+                                        <span id="face-box-label" class="px-2 py-0.5 rounded bg-emerald-500 text-black text-[11px] font-extrabold font-mono tracking-tight shadow-md">VIP ID: #1008 (Alex Mercer)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loyalty Profile Results Card -->
+                        <div class="lg:col-span-5 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-6">
+                                    <h3 class="font-heading font-bold text-sm uppercase tracking-wider text-zinc-400">Loyalty Analytics DB</h3>
+                                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">LBPH • Face DB</span>
+                                </div>
+
+                                <!-- Waiting State -->
+                                <div id="face-waiting" class="text-center py-12 space-y-3 text-zinc-600">
+                                    <i data-lucide="shield" class="w-12 h-12 mx-auto stroke-[1.5]"></i>
+                                    <p class="text-xs font-medium">Awaiting biometric scan...</p>
+                                    <p class="text-[11px] text-zinc-500">Click Try Demo on the left to test recognition.</p>
+                                </div>
+
+                                <!-- Profile Found -->
+                                <div id="face-results" class="hidden space-y-6 animate-fade-in">
+                                    <div class="p-5 rounded-xl bg-gradient-to-tr from-emerald-950/30 to-teal-900/20 border border-emerald-500/30 relative">
+                                        <div class="flex items-center gap-4">
+                                            <div id="face-initials" class="w-12 h-12 rounded-full border-2 border-emerald-400 bg-emerald-500/20 flex items-center justify-center font-bold text-lg text-emerald-300">
+                                                AM
+                                            </div>
+                                            <div>
+                                                <div class="text-lg font-heading font-bold text-white flex items-center gap-1.5">
+                                                    <span id="face-profile-name">Alex Mercer</span>
+                                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 fill-emerald-500/20"></i>
+                                                </div>
+                                                <span id="face-profile-tier" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500 text-black mt-1">VIP Gold Loyalty Member</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Customer Visit Statistics -->
+                                    <div class="grid grid-cols-2 gap-3 text-xs">
+                                        <div class="p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+                                            <div class="text-zinc-500 text-[10px]">Total Store Visits</div>
+                                            <div id="face-profile-visits" class="text-xl font-heading font-extrabold text-white mt-1">24 <span class="text-xs text-emerald-400 font-normal">(+1 today)</span></div>
+                                        </div>
+                                        <div class="p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+                                            <div class="text-zinc-500 text-[10px]">Reward Balance</div>
+                                            <div id="face-profile-points" class="text-xl font-heading font-extrabold text-cyan-400 mt-1">1,450 pts</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ethics Banner -->
+                                    <div class="p-3.5 rounded-lg bg-zinc-900/60 border border-zinc-800/80 text-[11px] text-zinc-400 flex items-start gap-2.5">
+                                        <i data-lucide="lock" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                                        <div>
+                                            <strong class="text-zinc-200">Privacy & Consent Verified:</strong> Biometric vectors stored securely in encrypted <code>face_db.pkl</code> under strict customer loyalty opt-in agreement.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="resetFaceScanner()" class="w-full py-2.5 mt-6 rounded-xl border border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-zinc-300 transition-colors">
+                                Clear Record / Scan Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULE 3: SENTIMENT ANALYSIS (NLP Module B1/B2) -->
+                <div id="view-sentiment-analysis" class="module-view hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Review Input Area -->
+                        <div class="lg:col-span-7 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                            <i data-lucide="message-square-heart" class="w-4 h-4 text-blue-400"></i>
+                                            <span>Customer Review Sentiment (TF-IDF + SVM)</span>
+                                        </h3>
+                                        <p class="text-xs text-zinc-400 mt-0.5">Evaluate incoming customer product reviews and chat transcripts.</p>
+                                    </div>
+                                    <button onclick="runSentimentDemo()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:opacity-90 transition-all flex items-center gap-2">
+                                        <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-white"></i>
+                                        <span>Try Demo (1-Click)</span>
+                                    </button>
+                                </div>
+
+                                <div class="space-y-4 mt-4">
+                                    <div>
+                                        <label class="block text-xs font-medium text-zinc-400 mb-2">Paste customer feedback or review text below:</label>
+                                        <textarea id="sentiment-input" rows="7" class="w-full rounded-xl bg-zinc-900 border border-zinc-800 p-4 text-sm text-zinc-200 focus:outline-none focus:border-blue-500 transition-colors placeholder-zinc-600 resize-none font-sans" placeholder="Type or paste customer review here... e.g., 'The delivery was very fast and the shoes fit perfectly!'"></textarea>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs text-zinc-500">
+                                        <span>Preprocessing: Lowercase, stopword removal, lemmatization enabled.</span>
+                                        <span id="char-count">0 chars</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 mt-6">
+                                <button onclick="analyzeCustomSentiment()" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-sm text-white transition-colors shadow-lg flex items-center justify-center gap-2">
+                                    <i data-lucide="play" class="w-4 h-4"></i>
+                                    <span>Run Sentiment Classifier</span>
+                                </button>
+                                <button onclick="clearSentiment()" class="px-5 py-3 rounded-xl border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 font-semibold text-sm text-zinc-400 transition-colors">
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sentiment Diagnostic Output -->
+                        <div class="lg:col-span-5 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-6">
+                                    <h3 class="font-heading font-bold text-sm uppercase tracking-wider text-zinc-400">NLP Classification Results</h3>
+                                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30">TF-IDF Vectorizer</span>
+                                </div>
+
+                                <!-- Waiting State -->
+                                <div id="sentiment-waiting" class="text-center py-12 space-y-3 text-zinc-600">
+                                    <i data-lucide="bar-chart-3" class="w-12 h-12 mx-auto stroke-[1.5]"></i>
+                                    <p class="text-xs font-medium">No input analyzed yet...</p>
+                                    <p class="text-[11px] text-zinc-500">Click Try Demo or enter custom text to analyze.</p>
+                                </div>
+
+                                <!-- Result Active State -->
+                                <div id="sentiment-results" class="hidden space-y-6 animate-fade-in">
+                                    <div id="sentiment-badge-container" class="p-5 rounded-xl bg-gradient-to-tr from-blue-950/40 to-cyan-900/30 border border-blue-500/30 text-center relative overflow-hidden">
+                                        <div class="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-1">Detected Tone</div>
+                                        <div id="sentiment-label" class="text-4xl font-heading font-extrabold text-emerald-400 flex items-center justify-center gap-2">
+                                            <span>Positive</span>
+                                            <i data-lucide="smile" class="w-8 h-8"></i>
+                                        </div>
+                                        <div class="mt-2 text-xs text-zinc-300">Confidence Score: <strong id="sentiment-score" class="text-emerald-400">94.2%</strong></div>
+                                    </div>
+
+                                    <!-- Keyword Highlights -->
+                                    <div class="space-y-2">
+                                        <div class="text-xs font-semibold text-zinc-400">Key Sentiment Modifiers Extracted:</div>
+                                        <div id="sentiment-keywords" class="flex flex-wrap gap-2 pt-1">
+                                            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs">#exceptional (+0.42)</span>
+                                            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs">#fast_shipping (+0.38)</span>
+                                            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs">#recommend (+0.25)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Probability Bars -->
+                                    <div class="space-y-3 pt-2">
+                                        <div>
+                                            <div class="flex justify-between text-xs mb-1">
+                                                <span class="text-zinc-300">Positive Probability</span>
+                                                <span class="text-emerald-400 font-mono" id="prob-pos">94.2%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+                                                <div id="bar-pos" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 94.2%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-xs mb-1">
+                                                <span class="text-zinc-400">Neutral Probability</span>
+                                                <span class="text-zinc-500 font-mono" id="prob-neu">4.8%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                                                <div id="bar-neu" class="bg-blue-400 h-full rounded-full transition-all duration-500" style="width: 4.8%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-xs mb-1">
+                                                <span class="text-zinc-400">Negative Probability</span>
+                                                <span class="text-zinc-500 font-mono" id="prob-neg">1.0%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                                                <div id="bar-neg" class="bg-rose-500 h-full rounded-full transition-all duration-500" style="width: 1.0%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULE 4: AI SUPPORT ASSISTANT (NLP Module B3) -->
+                <div id="view-chatbot" class="module-view hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Interactive Chat Window -->
+                        <div class="lg:col-span-8 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col h-[580px]">
+                            <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
+                                        <i data-lucide="bot" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-bold text-white flex items-center gap-2">
+                                            <span>RetailVision FAQ AI</span>
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Hybrid Rule + ML</span>
+                                        </div>
+                                        <div class="text-[11px] text-zinc-400">Trained on custom retail <code>intents.json</code> • Instant answer routing</div>
+                                    </div>
+                                </div>
+                                <button onclick="runChatDemo()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:opacity-90 transition-all flex items-center gap-2">
+                                    <i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i>
+                                    <span>Try Random Chat Query (1-Click)</span>
+                                </button>
+                            </div>
+
+                            <!-- Messages History Box -->
+                            <div id="chat-messages" class="flex-1 overflow-y-auto space-y-4 pr-2 my-2 font-sans">
+                                <!-- Welcome Message -->
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 text-xs">AI</div>
+                                    <div class="p-4 rounded-2xl rounded-tl-none bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 max-w-lg leading-relaxed shadow-sm">
+                                        Hello! I am your AI Retail Assistant. You can ask me anything regarding order status, return policy timeframes, product inventory, or store business hours! How can I assist you today?
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Input Bar -->
+                            <div class="pt-4 border-t border-zinc-800 flex items-center gap-2 mt-auto">
+                                <input type="text" id="chat-input-field" onkeypress="handleKeyPress(event)" class="flex-1 rounded-xl bg-zinc-900 border border-zinc-800 px-4 py-3 text-xs text-zinc-200 focus:outline-none focus:border-amber-500 transition-colors" placeholder="Ask a question (e.g., 'What is your return policy?' or 'Where is my order #5521?')...">
+                                <button onclick="sendChatMessage()" class="p-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold transition-all shadow-lg flex items-center justify-center">
+                                    <i data-lucide="send" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Quick Questions Card -->
+                        <div class="lg:col-span-4 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col justify-between h-[580px]">
+                            <div>
+                                <h3 class="font-heading font-bold text-sm uppercase tracking-wider text-zinc-400 pb-4 border-b border-zinc-800 mb-4">Sample FAQ Benchmark Queries</h3>
+                                <p class="text-[11px] text-zinc-500 mb-4 leading-normal">Click any query below to test intent identification and rule vs ML routing:</p>
+                                <div class="space-y-2.5">
+                                    <button onclick="triggerQuickChat('What is your store return policy?')" class="w-full p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 text-xs text-zinc-300 text-left transition-all flex items-center justify-between group">
+                                        <span>"What is your store return policy?"</span>
+                                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-zinc-600 group-hover:text-amber-400"></i>
+                                    </button>
+                                    <button onclick="triggerQuickChat('Can I track my order #84930?')" class="w-full p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 text-xs text-zinc-300 text-left transition-all flex items-center justify-between group">
+                                        <span>"Can I track my order #84930?"</span>
+                                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-zinc-600 group-hover:text-amber-400"></i>
+                                    </button>
+                                    <button onclick="triggerQuickChat('What are your store business hours?')" class="w-full p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 text-xs text-zinc-300 text-left transition-all flex items-center justify-between group">
+                                        <span>"What are your store business hours?"</span>
+                                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-zinc-600 group-hover:text-amber-400"></i>
+                                    </button>
+                                    <button onclick="triggerQuickChat('Do you offer discounts for VIP members?')" class="w-full p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/40 text-xs text-zinc-300 text-left transition-all flex items-center justify-between group">
+                                        <span>"Do you offer discounts for VIPs?"</span>
+                                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-zinc-600 group-hover:text-amber-400"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
+                                <div class="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
+                                    <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-400"></i>
+                                    <span>Architecture Advantage</span>
+                                </div>
+                                <p class="text-[11px] text-zinc-500 leading-normal">
+                                    Rule-based matching serves deterministic queries in &lt;1ms, while ML TF-IDF classifiers handle unstructured language fallbacks.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULE 5: ANALYTICS HUB & CHARTS -->
+                <div id="view-analytics" class="module-view hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Visitor Footfall Trends Line Chart -->
+                        <div class="p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                        <i data-lucide="trending-up" class="w-4 h-4 text-blue-400"></i>
+                                        <span>Hourly Store Footfall & Loyalty Check-ins</span>
+                                    </h3>
+                                    <p class="text-xs text-zinc-400 mt-0.5">24-hour physical retail location biometric traffic analysis.</p>
+                                </div>
+                                <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">Live Sync</span>
+                            </div>
+                            <div class="h-64 w-full relative">
+                                <canvas id="chartFootfall"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Sentiment Ratio Pie Chart -->
+                        <div class="p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                        <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400"></i>
+                                        <span>Aggregate Review Sentiment Breakdown</span>
+                                    </h3>
+                                    <p class="text-xs text-zinc-400 mt-0.5">Cumulative customer satisfaction ratios from NLP classifier.</p>
+                                </div>
+                                <span class="text-xs font-mono text-blue-400 bg-blue-500/10 px-2 py-1 rounded border border-blue-500/20">92% Positive</span>
+                            </div>
+                            <div class="h-64 w-full relative flex items-center justify-center">
+                                <canvas id="chartSentiment"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chatbot Intent Frequency Bar Chart -->
+                        <div class="lg:col-span-2 p-6 rounded-2xl bg-[#141417] border border-zinc-800 flex flex-col">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="font-heading font-bold text-base text-white flex items-center gap-2">
+                                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-amber-400"></i>
+                                        <span>Top Customer Support Inquiries by Intent Category</span>
+                                    </h3>
+                                    <p class="text-xs text-zinc-400 mt-0.5">Automated resolution distribution across retail FAQ intent topics.</p>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs text-zinc-400">
+                                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-blue-500 inline-block"></span> Automated Rule</span>
+                                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-cyan-500 inline-block"></span> ML Classifier</span>
+                                </div>
+                            </div>
+                            <div class="h-64 w-full relative">
+                                <canvas id="chartIntents"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </section>
+
+    <!-- App JavaScript Logic -->
+    <script src="app.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
