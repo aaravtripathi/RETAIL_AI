@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: retailvision-ai-capstone
-    runtime: docker
-    autoDeploy: true
-    envVars:
-      - key: PYTHONUNBUFFERED
-        value: "1"
