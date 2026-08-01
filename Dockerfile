@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# Install system dependencies required for OpenCV (cv2) and AI processing pipelines
+# Install system dependencies required for image processing and graphics libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1-mesa-glx \
     libglib2.0-0 \
@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set working directory inside container
 WORKDIR /app
 
-# Copy dependency requirements file
-COPY requirements.txt .
+# Copy dependency requirements file from backend directory
+COPY backend/requirements.txt ./requirements.txt
 
 # Upgrade pip and install required packages without caching
 RUN pip install --no-cache-dir --upgrade pip && \
